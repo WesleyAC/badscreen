@@ -3,6 +3,12 @@
 	"name": "bad screen",
 	"version": "0.0.0",
 
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "bad-screen@wesleyac.com"
+		}
+	},
+
 	"background": {
 		"scripts": ["background.js"]
 	},
