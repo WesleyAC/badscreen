@@ -9,10 +9,15 @@ It allows blocking and allowing websites on a schedule, as well as temporarily d
 
 ## changelog
 
+### v0.0.2
+
+* Update icon to have transparent background
+* Remove unneeded files from bundle
+
 ### v0.0.1
 
-Only intercept requests that we know will be blocked, fixing bug where all requests were slowed down whenever the extension was installed.
+* Only intercept requests that we know will be blocked, fixing bug where all requests were slowed down whenever the extension was installed.
 
 ### v0.0.0
 
-Initial release. It's bad. Don't use it.
+* Initial release. It's bad. Don't use it.
