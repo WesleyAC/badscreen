@@ -27,7 +27,7 @@ function timeMatchesNow(time) {
 
 function blocklistToFilters(blocklist) {
 	return [].concat.apply([], blocklist.map(entry => {
-		return blockAppliesToSites(entry).map(url => `*://${url}/*`);
+		return blockAppliesToSites(entry).map(url => `*://*.${url}/*`);
 	}))
 }
 
