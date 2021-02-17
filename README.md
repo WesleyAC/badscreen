@@ -11,6 +11,10 @@ It allows blocking and allowing websites on a schedule, as well as temporarily d
 
 ## changelog
 
+### v0.0.4
+
+* Fix bug that caused temp allows to be out of sync with the UI
+
 ### v0.0.3
 
 * Block all subdomains of blocked domains
