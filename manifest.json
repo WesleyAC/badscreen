@@ -27,6 +27,7 @@
 	],
 
 	"permissions": [
+		"alarms",
 		"storage",
 		"webRequest",
 		"webRequestBlocking",

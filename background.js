@@ -45,9 +45,9 @@ async function updateTempAllowAlarms() {
 	let blocklist = (await browser.storage.local.get()).blocklist;
 	blocklist.forEach((entry, ei) => {
 		entry.websites.forEach((website, wi) => {
-			if (website.temp_allow) {
-				let time_1 = website.temp_allow + (website.temp_delay * 60 * 1000);
-				let time_2 = website.temp_allow + ((website.temp_delay + website.temp_time) * 60 * 1000);
+			if (website.temp_allow_start != null) {
+				let time_1 = website.temp_allow_start + (website.temp_delay * 60 * 1000);
+				let time_2 = website.temp_allow_start + ((website.temp_delay + website.temp_time) * 60 * 1000);
 				// TODO: don't leak alarms
 				let label_1 = `temp_${ei}_${wi}_1`;
 				let label_2 = `temp_${ei}_${wi}_2`;
@@ -65,9 +65,11 @@ browser.storage.onChanged.addListener((changes, area) => {
 	}
 });
 
+updateRequestHandler();
+
 // Yeah, reloading every minute is bad, but idgaf
 browser.alarms.create("reload_filter", {
-	when: Date.now() + 1000,
+	when: (Math.ceil(Date.now() / (1000*60)) * (1000*60)) + 1000,
 	periodInMinutes: 1,
 });
 
