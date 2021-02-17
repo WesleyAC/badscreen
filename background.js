@@ -1,20 +1,15 @@
+function blockAppliesToSites(entry) {
+	return entry.websites.filter(website => {
+		let time_matches = entry.times.map(timeMatchesNow).includes(true);
+		let type_allow = entry.type === "allow";
+		let time_block = (type_allow !== time_matches);
+		let temp_allow = Date.now() > (website.temp_allow_start + (website.temp_delay * 1000 * 60)) && Date.now() < (website.temp_allow_start + ((website.temp_delay + website.temp_time) * 1000 * 60));
+		return time_block && !temp_allow;
+	}).map(website => website.url);
+}
+
 async function filterRequest(details) {
-	let blocklist = (await browser.storage.local.get()).blocklist;
-	let hostname = (new URL(details.url)).hostname;
-	let deny = blocklist.filter(entry => entry.existing && !entry.editing).map(entry => {
-		return entry.websites.filter(website => website.url == hostname).map(website => {
-			let time_matches = entry.times.map(timeMatchesNow).includes(true);
-			let type_allow = entry.type === "allow";
-			let time_block = (type_allow !== time_matches);
-			let temp_allow = Date.now() > (website.temp_allow_start + (website.temp_delay * 1000 * 60)) && Date.now() < (website.temp_allow_start + ((website.temp_delay + website.temp_time) * 1000 * 60));
-			return time_block && !temp_allow;
-		}).includes(true);
-	}).includes(true);
-	if (deny) {
-		return {redirectUrl: browser.runtime.getURL("/blocked.html")};
-	} else {
-		return {};
-	}
+	return {redirectUrl: browser.runtime.getURL("/blocked.html")};
 }
 
 function timeMatchesNow(time) {
@@ -32,9 +27,7 @@ function timeMatchesNow(time) {
 
 function blocklistToFilters(blocklist) {
 	return [].concat.apply([], blocklist.map(entry => {
-		return entry.websites.map(website => {
-			return `*://${website.url}/*`;
-		})
+		return blockAppliesToSites(entry).map(url => `*://${url}/*`);
 	}))
 }
 
@@ -54,4 +47,12 @@ browser.storage.onChanged.addListener((changes, area) => {
 	}
 });
 
-updateRequestHandler();
+// Yeah, reloading every minute is bad, but idgaf
+browser.alarms.create("reload_filter", {
+	when: Date.now() + 1000,
+	periodInMinutes: 1,
+});
+
+browser.alarms.onAlarm.addListener((alarm) => {
+	updateRequestHandler();
+});
