@@ -35,3 +35,7 @@ It allows blocking and allowing websites on a schedule, as well as temporarily d
 ### v0.0.0
 
 * Initial release. It's bad. Don't use it.
+
+## note to addon reviewer
+
+The minified code in `3p/htm.js` is third-party code — it's a vendored copy of `https://unpkg.com/htm@3.1.0/dist/htm.module.js?module`. The source code to generate that file is at https://github.com/developit/htm/.
